@@ -7,15 +7,15 @@ availableSecrets:
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: ['-c', 'echo $$PASSWORD | docker login --username=$$USERNAME --password-stdin']
+    args: ['-c', 'echo $$DOCKER_PASSWORD | docker login --username=$$DOCKER_USERNAME --password-stdin']
     secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform=linux/amd64,linux/arm64', '-t', '$$USERNAME/shopware-docker:latest-nginx', 'nginx']
+    args: ['build', '--platform=linux/amd64,linux/arm64', '-t', '$$DOCKER_USERNAME/shopware-docker:latest-nginx', 'nginx']
     secretEnv: ['DOCKER_USERNAME']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['tag', '$$USERNAME/shopware-docker:latest-nginx']
+    args: ['tag', '$$DOCKER_USERNAME/shopware-docker:latest-nginx']
     secretEnv: ['DOCKER_USERNAME']
 timeout: '1800s'
-images: ['hlou/shopware-docker']
+images: ['$DOCKER_USERNAME/shopware-docker']
 options:
   logging: CLOUD_LOGGING_ONLY
