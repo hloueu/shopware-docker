@@ -16,6 +16,6 @@ steps:
     args: ['tag', '$$USERNAME/shopware-docker:latest-nginx']
     secretEnv: ['DOCKER_USERNAME']
 timeout: '1800s'
-images: ['$$USERNAME/shopware-docker']
+images: ['$USERNAME/shopware-docker']
 options:
   logging: CLOUD_LOGGING_ONLY
