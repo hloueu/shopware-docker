@@ -10,11 +10,9 @@ steps:
     args: ['-c', 'echo $$DOCKER_PASSWORD | docker login --username=$$DOCKER_USERNAME --password-stdin']
     secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform=linux/amd64,linux/arm64', '-t', '$DOCKER_USERNAME/shopware-docker:latest-nginx', 'nginx']
-    secretEnv: ['DOCKER_USERNAME']
+    args: ['build', '--platform=linux/amd64,linux/arm64', '-t', 'hlou/shopware-docker:latest-nginx', 'nginx']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['tag', '$DOCKER_USERNAME/shopware-docker:latest-nginx']
-    secretEnv: ['DOCKER_USERNAME']
+    args: ['tag', 'hlou/shopware-docker:latest-nginx']
 timeout: '1800s'
 images: ['hlou/shopware-docker']
 options:
