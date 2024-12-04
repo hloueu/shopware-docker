@@ -19,4 +19,4 @@ steps:
     secretEnv: ['DOCKER_USERNAME']
 timeout: '1800s'
 options:
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
