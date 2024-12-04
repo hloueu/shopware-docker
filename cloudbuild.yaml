@@ -5,13 +5,42 @@ availableSecrets:
     - versionName: projects/$PROJECT_ID/secrets/docker-hub_password/versions/latest
       env: 'DOCKER_PASSWORD'
 steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - run
+      - '--privileged'
+      - 'linuxkit/binfmt:v0.7'
+    id: initialize-qemu
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - buildx
+      - create
+      - '--name'
+      - multiarch-builder
+    id: create-builder
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - buildx
+      - use
+      - multiarch-builder
+    id: select-builder
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - buildx
+      - inspect
+      - '--bootstrap'
+    id: show-target-build-platforms
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: ['-c', 'echo $$DOCKER_PASSWORD | docker login --username=$$DOCKER_USERNAME --password-stdin']
     secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
+    id: docker-hub-login
   - name: 'gcr.io/cloud-builders/docker'
     args: ['buildx', 'build', '--platform', 'linux/amd64,linux/arm64', '-t', 'hlou/shopware-docker:latest-nginx', '--push', 'nginx']
+    id: docker-image-build
 timeout: '1800s'
 images: ['hlou/shopware-docker']
 options:
   logging: CLOUD_LOGGING_ONLY
+  env:
+    - DOCKER_CLI_EXPERIMENTAL=enabled
