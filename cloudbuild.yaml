@@ -18,3 +18,5 @@ steps:
     args: ['-c', 'docker push $$USERNAME/shopware-docker:latest-nginx']
     secretEnv: ['DOCKER_USERNAME']
 timeout: '1800s'
+options:
+  logging: NONE
